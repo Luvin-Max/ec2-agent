@@ -1,0 +1,23 @@
+[Unit]
+Description=EC2 Monitoring Agent
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=/opt/ec2-agent
+EnvironmentFile=/opt/ec2-agent/.env
+ExecStart=/usr/bin/node /opt/ec2-agent/agent.js
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=ec2-agent
+
+# Auto-restart on failure
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target
